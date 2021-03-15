@@ -1,0 +1,55 @@
+html, body {
+    background-color: #F6F7F9;
+}
+
+input:required:invalid, input:focus:invalid {
+    border: 1px solid rgb(186, 100, 100);
+}
+input:required:valid {
+    border: 1px solid rgb(100, 186, 100);
+}
+
+thead {
+    border-style: hidden;
+}
+
+.btn-primary, .btn-primary:active, .btn-primary:visited {
+    background-color: #346CB0 !important;
+    border-color: #346CB0 !important;
+}
+.btn-primary:hover {
+    background-color: #2e609e !important;
+    border-color: #2e609e !important;
+}
+
+.card {
+    -webkit-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.1);
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.1);
+    border: 0px;
+    margin: 0 1rem 0 1rem;
+}
+.card-header {
+    color: #FFF;
+    border-bottom: 0;
+    background-color: #346CB0;
+    height: 50px;
+}
+.card-header h5 {
+    display:inline-block;
+    vertical-align:middle;
+    line-height:1.2em;
+    margin-top:0px;
+    margin-bottom:0px;
+}
+.card-footer {
+    border-top: 0;
+    background-color: #FFF;
+    padding: 0;
+}
+
+@media only screen and (max-width: 992px) {
+    .optional{
+        display: none;
+    }
+}

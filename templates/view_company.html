@@ -1,0 +1,58 @@
+{% extends "template.html" %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        <h5>Ver empresa</h5>
+    </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 form-group mt-2">
+                    <label for="name">Nombre de la empresa</label>
+                    <input type="text" class="form-control" id="name" name="name" value="{{company.name}}" readonly>
+                </div>
+                <div class="col-md-6 form-group mt-2">
+                    <label for="dni_cif">DNI o CIF</label>
+                    <input type="text" class="form-control" id="dni_cif" name="dni_cif" value="{{company.dni_cif}}" readonly>
+                </div>
+
+                <div class="col-md-4 form-group mt-2">
+                    <label for="email">Correo electronico</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{company.email}}" readonly>
+                </div>
+                <div class="col-md-4 form-group mt-2">
+                    <label for="phone">Teléfono</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" value="{{company.phone}}" readonly>
+                </div>
+                <div class="col-md-4 form-group mt-2">
+                    <label for="address">Dirección</label>
+                    <input type="text" class="form-control" id="address" name="address" value="{{company.address}}" readonly>
+                </div>
+
+                <div class="col-md-3 form-group mt-2">
+                    <label for="postal_code">Código postal</label>
+                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{company.postal_code}}" readonly>
+                </div>
+                <div class="col-md-3 form-group mt-2">
+                    <label for="city">Ciudad</label>
+                    <input type="text" class="form-control" id="city" name="city" value="{{company.city}}" readonly>
+                </div>
+                <div class="col-md-3 form-group mt-2">
+                    <label for="province">Provincia</label>
+                    <input type="text" class="form-control" id="province" name="province" value="{{company.province}}" readonly>
+                </div>
+                <div class="col-md-3 form-group mt-2">
+                    <label for="country">Pais</label>
+                    <input type="text" class="form-control" id="country" name="country" value="{{company.country}}" readonly>
+                </div>
+
+                <div class="col-12 form-group mt-2">
+                    <label for="notes">Notas</label>
+                    <textarea rows="2" class="form-control" id="notes" name="notes" readonly>{{company.notes}}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
