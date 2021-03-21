@@ -15,10 +15,10 @@ Aplicación construida sobre Python + Flask + PonyORM + SQLite
 
 ## Roapmap
 
-* [] Realizar una analitica de los datos
-* [] Gestionar los cambios de personalizacion desde la aplicación
-* [] Permitir los cambios de multiples autonomos y/o empresas
-* [] Exportación de movimientos para asesores
+* [ ] Realizar una analitica de los datos
+* [ ] Gestionar los cambios de personalizacion desde la aplicación
+* [ ] Permitir los cambios de multiples autonomos y/o empresas
+* [ ] Exportación de movimientos para asesores
 
 ## Personalización
 
@@ -27,9 +27,9 @@ Aplicación construida sobre Python + Flask + PonyORM + SQLite
 
 ## Capturas
 
-<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot001.jpg?raw=true" alt="Contabimo"/>
-<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot002.jpg?raw=true" alt="Contabimo"/>
-<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot003.jpg?raw=true" alt="Contabimo"/>
-<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot004.jpg?raw=true" alt="Contabimo"/>
-<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot005.jpg?raw=true" alt="Contabimo"/>
-<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot006.jpg?raw=true" alt="Contabimo"/>
+<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot001.jpeg?raw=true" alt="Contabimo"/>
+<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot002.jpeg?raw=true" alt="Contabimo"/>
+<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot003.jpeg?raw=true" alt="Contabimo"/>
+<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot004.jpeg?raw=true" alt="Contabimo"/>
+<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot005.jpeg?raw=true" alt="Contabimo"/>
+<img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot006.jpeg?raw=true" alt="Contabimo"/>
