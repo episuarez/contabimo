@@ -2,60 +2,60 @@
 {% block content %}
 <div class="card">
     <div class="card-header">
-        <h5>Ver ingreso</h5>
+        <h5>Ver gasto</h5>
     </div>
     <div class="card-body">
         <div class="container-fluid">
             <form class="row">
                 <div class="col-md-4 form-group mt-2">
                     <label for="identifier" class="form-label">Identificador</label>
-                    <input type="text" class="form-control" id="identifier" name="identifier" value="{{income.identifier}}" readonly>
+                    <input type="text" class="form-control" id="identifier" name="identifier" value="{{expense.identifier}}" readonly>
                 </div>
                 <div class="col-md-4 form-group mt-2">
                     <label for="company" class="form-label">Empresa</label>
-                    <input type="text" class="form-control" id="company" name="company" value="{{income.company.name}}" readonly>
+                    <input type="text" class="form-control" id="company" name="company" value="{{expense.company.name}}" readonly>
                 </div>
                 <div class="col-md-4 form-group mt-2">
                     <label for="status" class="form-label">Estado</label>
-                    <input type="text" class="form-control" id="status" name="status" value="{{income.status}}" readonly>
+                    <input type="text" class="form-control" id="status" name="status" value="{{expense.status}}" readonly>
                 </div>
 
                 <div class="col-md-4 form-group mt-2">
                     <label for="expiration_date" class="form-label">Fecha de expiración</label>
-                    <input type="text" class="form-control datepicker" id="expiration_date" name="expiration_date" value="{{income.expiration_date.strftime('%d/%m/%Y')}}" readonly>
+                    <input type="text" class="form-control datepicker" id="expiration_date" name="expiration_date" value="{{expense.expiration_date.strftime('%d/%m/%Y')}}" readonly>
                 </div>
                 <div class="col-md-4 form-group mt-2">
                     <label for="irpf" class="form-label">IRPF</label>
-                    <input type="text" class="form-control" id="irpf" name="irpf" value="{{income.irpf}}" readonly>
+                    <input type="text" class="form-control" id="irpf" name="irpf" value="{{expense.irpf}}" readonly>
                 </div>
                 <div class="col-md-4 form-group mt-2">
                     <label for="iva" class="form-label">IVA</label>
-                    <input type="text" class="form-control" id="iva" name="iva" value="{{income.iva}}" readonly>
+                    <input type="text" class="form-control" id="iva" name="iva" value="{{expense.iva}}" readonly>
                 </div>
 
                 <div class="col-md-4 form-group mt-2">
                     <label for="irpf_money" class="form-label">IRPF (€)</label>
-                    <input type="text" class="form-control" id="irpf_money" name="irpf_money" value="{{income.irpf_money}}" readonly>
+                    <input type="text" class="form-control" id="irpf_money" name="irpf_money" value="{{expense.irpf_money}}" readonly>
                 </div>
                 <div class="col-md-4 form-group mt-2">
                     <label for="iva_money" class="form-label">IVA (€)</label>
-                    <input type="text" class="form-control" id="iva_money" name="iva_money" value="{{income.iva_money}}" readonly>
+                    <input type="text" class="form-control" id="iva_money" name="iva_money" value="{{expense.iva_money}}" readonly>
                 </div>
                 <div class="col-md-4 form-group mt-2">
                     <label for="total" class="form-label">Total (€)</label>
-                    <input type="text" class="form-control" id="total" name="total" value="{{income.total}}" readonly>
+                    <input type="text" class="form-control" id="total" name="total" value="{{expense.total}}" readonly>
                 </div>
 
                 <div class="col-12 form-group mt-2">
                     <label for="notes" class="form-label">Notas</label>
-                    <textarea rows="2" class="form-control" id="notes" name="notes" readonly>{{income.notes}}</textarea>
+                    <textarea rows="2" class="form-control" id="notes" name="notes" readonly>{{expense.notes}}</textarea>
                 </div>
 
                 <h5 class="mt-4">Productos:</h5>
 
                 <div id="products">
                     {% set ns = namespace(position=1) %}
-                    {% for product in income.products %}
+                    {% for product in expense.products %}
                         <div class="row" id="product">
                             <div class="col-md-8 form-group mt-2">
                                 <label for="description[{{ns.position}}]" class="form-label">Descripción</label>
