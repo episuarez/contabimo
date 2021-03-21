@@ -20,7 +20,11 @@ data = json.load(open("my_data.json", encoding="utf-8"));
 def home():
     with models.orm.db_session:
         total_companies = models.orm.count(company for company in models.Companies);
-        last_company = list(models.orm.select(company.name for company in models.Companies).order_by(lambda: company.id))[-1];
+
+        if (total_companies > 0):
+            last_company = list(models.orm.select(company.name for company in models.Companies).order_by(lambda: company.id))[-1];
+        else:
+            last_company = "";
 
         total_incomes = sum(models.orm.select(sum(income.total for income in company.income_invoice) for company in models.Companies));
         total_expenses = sum(models.orm.select(sum(expense.total for expense in company.expense_invoice) for company in models.Companies));
@@ -197,7 +201,11 @@ def add_income():
         return redirect(url_for("incomes"));
     else:
         with models.orm.db_session:
-            last_identifier = list(models.orm.select(income.identifier for income in models.IncomeInvoice if income.date > datetime.datetime(int(time.strftime("%Y")), 1, 1)))[-1];
+            if models.orm.count(income.identifier for income in models.IncomeInvoice) > 0:
+                last_identifier = list(models.orm.select(income.identifier for income in models.IncomeInvoice if income.date > datetime.datetime(int(time.strftime("%Y")), 1, 1)))[-1];
+            else:
+                last_identifier = "000";
+
         number = int(last_identifier[-3:]) + 1;
         number = ("0" * (3 - len(str(number))))  + str(number);
 
