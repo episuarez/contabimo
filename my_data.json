@@ -1,0 +1,21 @@
+{
+    "DEFAULTS": {
+        "START_IDENTIFIER": "FACT",
+        "IVA": 21,
+        "IRPF": 0
+    },
+    "my_company": {
+        "name": "name",
+        "email": "email",
+        "dni_cif": "dni_cif",
+        "phone": "phone",
+        "address": "address",
+        "postal_code": "postal_code",
+        "city": "city",
+        "province": "province",
+        "country": "country",
+        "bank_account": "bank_account",
+        "bizum_account": "bizum_account",
+        "paypal_account": "paypal_account"
+    }
+}

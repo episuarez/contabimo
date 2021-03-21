@@ -18,7 +18,20 @@ data = json.load(open("my_data.json", encoding="utf-8"));
 
 @app.route("/")
 def home():
-    return render_template("home.html");
+    with models.orm.db_session:
+        total_companies = models.orm.count(company for company in models.Companies);
+        last_company = list(models.orm.select(company.name for company in models.Companies).order_by(lambda: company.id))[-1];
+
+        total_incomes = sum(models.orm.select(sum(income.total for income in company.income_invoice) for company in models.Companies));
+        total_expenses = sum(models.orm.select(sum(expense.total for expense in company.expense_invoice) for company in models.Companies));
+
+        top_company_incomes = sorted(list(models.orm.select((company.name, sum(income.total for income in company.income_invoice)) for company in models.Companies)), key=lambda element: element[1], reverse=True)[:5];
+        top_company_expenses = sorted(list(models.orm.select((company.name, sum(expense.total for expense in company.expense_invoice)) for company in models.Companies)), key=lambda element: element[1], reverse=True)[:5];
+
+        top_incomes = list(models.orm.select((income.company.name, income.total) for income in models.IncomeInvoice).order_by(lambda: models.orm.desc(income.total)))[:5];
+        top_expenses = list(models.orm.select((expense.company.name, expense.total) for expense in models.ExpenseInvoice).order_by(lambda: models.orm.desc(expense.total)))[:5];
+
+    return render_template("home.html", total_companies=total_companies, last_company=last_company, total_incomes=total_incomes, total_expenses=total_expenses, top_company_incomes=top_company_incomes, top_company_expenses=top_company_expenses, top_incomes=top_incomes, top_expenses=top_expenses);
 
 # Companies
 
@@ -156,7 +169,7 @@ def add_income():
                 new_income = models.IncomeInvoice(
                     company=request.form["company"],
                     identifier=request.form["identifier"],
-                    date=datetime.datetime.now(),
+                    date=request.form["date"],
                     modification_date=datetime.datetime.now(),
                     expiration_date=datetime.datetime.strptime(request.form["expiration_date"], "%d/%m/%Y"),
                     status=request.form["status"],
@@ -193,7 +206,7 @@ def add_income():
         with models.orm.db_session:
             companies = list(models.orm.select((company.id, company.name) for company in models.Companies).order_by(lambda: company.name));
 
-        return render_template("add_income.html", companies=companies, identifier=identifier, iva=data["DEFAULTS"]["IVA"], irpf=data["DEFAULTS"]["IRPF"]);
+        return render_template("add_income.html", date=datetime.datetime.now(), companies=companies, identifier=identifier, iva=data["DEFAULTS"]["IVA"], irpf=data["DEFAULTS"]["IRPF"]);
 
 @app.route("/incomes/copy/<id>")
 def copy_income(id):
@@ -208,7 +221,7 @@ def copy_income(id):
             income = models.IncomeInvoice[id];
             companies = list(models.orm.select((company.id, company.name) for company in models.Companies).order_by(lambda: company.name));
 
-            return render_template("copy_income.html", identifier=identifier, income=income, companies=companies);
+            return render_template("copy_income.html", date=datetime.datetime.now(), identifier=identifier, income=income, companies=companies);
         else:
             flash("No se encuentra el ingreso que intentas copiar.")
             return redirect(url_for("incomes"));
@@ -272,6 +285,7 @@ def edit_invoice(id):
                 income = models.IncomeInvoice[id];
 
                 income.company = request.form["company"];
+                income.date = request.form["date"];
                 income.modification_date = datetime.datetime.now();
                 income.expiration_date = datetime.datetime.strptime(request.form["expiration_date"], "%d/%m/%Y");
                 income.status = request.form["status"];
@@ -331,7 +345,7 @@ def add_expense():
                 new_expense = models.ExpenseInvoice(
                     company=request.form["company"],
                     identifier=request.form["identifier"],
-                    date=datetime.datetime.now(),
+                    date=request.form["date"],
                     modification_date=datetime.datetime.now(),
                     expiration_date=datetime.datetime.strptime(request.form["expiration_date"], "%d/%m/%Y"),
                     status=request.form["status"],
@@ -361,7 +375,7 @@ def add_expense():
         with models.orm.db_session:
             companies = list(models.orm.select((company.id, company.name) for company in models.Companies).order_by(lambda: company.name));
 
-        return render_template("add_expense.html", companies=companies, iva=data["DEFAULTS"]["IVA"], irpf=data["DEFAULTS"]["IRPF"]);
+        return render_template("add_expense.html", date=datetime.datetime.now(), companies=companies, iva=data["DEFAULTS"]["IVA"], irpf=data["DEFAULTS"]["IRPF"]);
 
 @app.route("/expenses/copy/<id>")
 def copy_expense(id):
@@ -370,7 +384,7 @@ def copy_expense(id):
             expense = models.ExpenseInvoice[id];
             companies = list(models.orm.select((company.id, company.name) for company in models.Companies).order_by(lambda: company.name));
 
-            return render_template("copy_expense.html", expense=expense, companies=companies);
+            return render_template("copy_expense.html", date=datetime.datetime.now(), expense=expense, companies=companies);
         else:
             flash("No se encuentra el ingreso que intentas copiar.")
             return redirect(url_for("expenses"));
@@ -404,6 +418,7 @@ def edit_expense(id):
                 expense = models.ExpenseInvoice[id];
 
                 expense.company = request.form["company"];
+                expense.date = request.form["date"];
                 expense.modification_date = datetime.datetime.now();
                 expense.expiration_date = datetime.datetime.strptime(request.form["expiration_date"], "%d/%m/%Y");
                 expense.status = request.form["status"];

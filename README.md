@@ -7,7 +7,7 @@ Para soluciones más complejas, deben valorar otras opciones.
 ## Roapmap
 
 * [] Realizar una analitica de los datos
-* [] Gestionar los cambios desde la aplicación
+* [] Gestionar los cambios de personalizacion desde la aplicación
 * [] Permitir los cambios de multiples autonomos y/o empresas
 * [] Exportación de movimientos para asesores
 

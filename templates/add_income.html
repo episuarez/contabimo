@@ -37,17 +37,22 @@
                     </select>
                 </div>
 
-                <div class="col-md-4 form-group mt-2">
+                <div class="col-md-3 form-group mt-2">
+                    <label for="date" class="form-label">Fecha de creación</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control datepicker" id="date" name="date" value="{{date.strftime('%d/%m/%Y')}}" required>
+                </div>
+                <div class="col-md-3 form-group mt-2">
                     <label for="expiration_date" class="form-label">Fecha de expiración</label>
                     <span class="form-text">*</span>
                     <input type="text" class="form-control datepicker" id="expiration_date" name="expiration_date" required>
                 </div>
-                <div class="col-md-4 form-group mt-2">
+                <div class="col-md-3 form-group mt-2">
                     <label for="irpf" class="form-label">IRPF</label>
                     <span class="form-text">*</span>
                     <input type="text" class="form-control" id="irpf" name="irpf" value="{{irpf}}" onchange="calculeTotal()" required>
                 </div>
-                <div class="col-md-4 form-group mt-2">
+                <div class="col-md-3 form-group mt-2">
                     <label for="iva" class="form-label">IVA</label>
                     <span class="form-text">*</span>
                     <input type="text" class="form-control" id="iva" name="iva" value="{{iva}}" onchange="calculeTotal()" required>

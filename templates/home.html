@@ -9,8 +9,8 @@
                     <h5>Empresas</h5>
                 </div>
                 <div class="card-body">
-                    <p>Total de empresas: </p>
-                    <p>Última empresa creada: </p>
+                    <p><span class="fw-bolder">Total de empresas:</span> {{total_companies}} empresas.</p>
+                    <p><span class="fw-bolder">Última empresa creada:</span> {{last_company}}</p>
                 </div>
             </div>
         </div>
@@ -20,10 +20,68 @@
                     <h5>Facturas</h5>
                 </div>
                 <div class="card-body">
-                    <p>Total de ingresos: </p>
-                    <p>Total de gastos: </p>
-                    <p>Total de ingresos (2021): </p>
-                    <p>Total de gastos (2021): </p>
+                    <p><span class="fw-bolder">Total de ingresos:</span> {{total_incomes}} €</p>
+                    <p><span class="fw-bolder">Total de gastos:</span> {{total_expenses}} €</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Top empresas ingresos:</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm table-borderless table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Empresa</th>
+                                <th scope="col">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for company in top_company_incomes %}
+                                <tr>
+                                    <td>
+                                        {{company.0}}
+                                    </td>
+                                    <td>
+                                        {{company.1}} €
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Top empresas gastos:</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-sm table-borderless table-striped">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">Empresa</th>
+                                <th scope="col">Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for company in top_company_expenses %}
+                                <tr>
+                                    <td>
+                                        {{company.0}}
+                                    </td>
+                                    <td>
+                                        {{company.1}} €
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -43,14 +101,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    #1 - AEPI Programadores Informáticos S.L.
-                                </td>
-                                <td>
-                                    10
-                                </td>
-                            </tr>
+                            {% for income in top_incomes %}
+                                <tr>
+                                    <td>
+                                        {{income.0}}
+                                    </td>
+                                    <td>
+                                        {{income.1}} €
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
@@ -70,76 +130,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    #1 - AEPI Programadores Informáticos S.L.
-                                </td>
-                                <td>
-                                    5000€
-                                </td>
-                            </tr>
+                            {% for expense in top_expenses %}
+                                <tr>
+                                    <td>
+                                        {{expense.0}}
+                                    </td>
+                                    <td>
+                                        {{expense.1}} €
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Top de ingresos (2021):</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-sm table-borderless table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Empresa</th>
-                                <th scope="col">Cantidad</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    #1 - AEPI Programadores Informáticos S.L.
-                                </td>
-                                <td>
-                                    10
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6 mb-3">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Top de gastos (2021):</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table table-sm table-borderless table-striped">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Empresa</th>
-                                <th scope="col">Cantidad</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    #1 - AEPI Programadores Informáticos S.L.
-                                </td>
-                                <td>
-                                    10
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 {% endblock %}
