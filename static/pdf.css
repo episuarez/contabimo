@@ -1,0 +1,27 @@
+body {
+    font-family: "Roboto";
+}
+h2 {
+    font-weight: 900;
+}
+small {
+    font-weight: 400;
+}
+td {
+    border: 0px solid #FFFFFF;
+}
+.bold {
+    font-weight: 900;
+}
+.bg_primary {
+    background-color: #A2D55C;
+}
+.color_primary {
+    color: #333333;
+}
+.color_secondary {
+    color: #333333;
+}
+.logo{
+    max-height: 95px;
+}

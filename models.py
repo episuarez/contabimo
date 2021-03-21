@@ -18,27 +18,54 @@ class Companies(db.Entity):
     province = orm.Required(str);
     country = orm.Required(str);
     notes = orm.Optional(str, nullable=True)
-    invoices = orm.Set("Invoices");
+    income_invoice = orm.Set("IncomeInvoice");
+    expense_invoice = orm.Set("ExpenseInvoice");
 
-class Invoices(db.Entity):
+class IncomeInvoice(db.Entity):
     id = orm.PrimaryKey(int, auto=True);
-    company = orm.Required(Companies);
-    type_invoices = orm.Required(bool)
-    date = orm.Required(datetime.date);
-    expiration_dae = orm.Required(datetime.date);
     identifier = orm.Required(str, unique=True);
+    date = orm.Required(datetime.date);
+    modification_date = orm.Required(datetime.date);
+    expiration_date = orm.Required(datetime.date);
+    status = orm.Required(str);
     irpf = orm.Required(float);
     iva = orm.Required(float);
+    irpf_money = orm.Required(float);
+    iva_money = orm.Required(float);
+    total = orm.Required(float);
     notes = orm.Optional(str, nullable=True);
-    products = orm.Set("Products");
     company = orm.Required(Companies);
+    products = orm.Set("IncomeProducts");
 
-class Products(db.Entity):
+class ExpenseInvoice(db.Entity):
+    id = orm.PrimaryKey(int, auto=True);
+    identifier = orm.Required(str, unique=True);
+    date = orm.Required(datetime.date);
+    modification_date = orm.Required(datetime.date);
+    expiration_date = orm.Required(datetime.date);
+    status = orm.Required(str);
+    irpf = orm.Required(float);
+    iva = orm.Required(float);
+    irpf_money = orm.Required(float);
+    iva_money = orm.Required(float);
+    total = orm.Required(float);
+    notes = orm.Optional(str, nullable=True);
+    company = orm.Required(Companies);
+    products = orm.Set("ExpenseProducts");
+
+class IncomeProducts(db.Entity):
     id = orm.PrimaryKey(int, auto=True);
     description = orm.Required(str);
     amount = orm.Required(float);
     price = orm.Required(float);
-    invoice = orm.Required(Invoices);
+    invoice = orm.Required(IncomeInvoice);
+
+class ExpenseProducts(db.Entity):
+    id = orm.PrimaryKey(int, auto=True);
+    description = orm.Required(str);
+    amount = orm.Required(float);
+    price = orm.Required(float);
+    invoice = orm.Required(ExpenseInvoice);
 
 db.bind(provider="sqlite", filename="data.db", create_db=True);
 db.generate_mapping(create_tables=True);

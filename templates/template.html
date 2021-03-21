@@ -12,33 +12,33 @@
   <body>
     <div class="container-fluid">
 
-        <nav class="navbar navbar-light navbar-glass navbar-top sticky-kit navbar-expand-lg">
-            <a class="navbar-brand mr-1 mr-sm-3" href="/">
+        <nav class="navbar navbar-light navbar-top navbar-expand-md ms-3">
+            <a class="navbar-brand" href="/">
                 <div class="d-flex align-items-center">
-                    <img class="mr-2" src="/static/logo.png" alt="Contabimo" width="40">
+                    <img class="me-2" width="35" src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64' aria-labelledby='title' aria-describedby='desc' role='img' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3EMoney Box%3C/title%3E%3Cdesc%3EA color styled icon from Orion Icon Library.%3C/desc%3E%3Cpath data-name='layer3' d='M60.3 37a6.8 6.8 0 0 1-3-1c-.4-.5-1.6-4.7-3.8-8a11.7 11.7 0 0 1 4.1-5.2c-2.8-1.4-5.7-2.3-11.4-1.6a29.3 29.3 0 0 0-6.3-1.2 10.1 10.1 0 0 1-5.6 2.1 8 8 0 0 1-5.8-2.5 21 21 0 0 0-7.1 2.1c-7.9 4.2-9.2 11-9.2 16.3s2.4 13.1 10.9 20h7.4v-4l8.7.5a22.8 22.8 0 0 0 2.3 3.5h7v-6a49.5 49.5 0 0 0 5.9-5c2.9.3 5.8-2 6.9-8.7 0-1-.5-1.3-1-1.3z' fill='%23efbdd2'%3E%3C/path%3E%3Ccircle data-name='layer2' cx='34.5' cy='14' r='8' fill='%23fc6'%3E%3C/circle%3E%3Ccircle data-name='layer1' cx='48.5' cy='34' r='1' fill='%237b8baf'%3E%3C/circle%3E%3Cpath d='M24.5 24l3.7 1.1a20.1 20.1 0 0 1 12.7-.1 17.7 17.7 0 0 0 2.8-4.5 17.8 17.8 0 0 0-3.9-.5 10.1 10.1 0 0 1-5.6 2.1 8 8 0 0 1-5.8-2.5 21 21 0 0 0-7.1 2.1c-7.9 4.2-9.2 11-9.2 16.3S14.5 51 23 58h2c-1.7-3-6.4-12.5-6.4-20a19.1 19.1 0 0 1 5.9-14zm17 34h7v-6a49.5 49.5 0 0 0 5.9-5c2.5.2 5.1-1.5 6.5-6.5-1.8 1.5-4.8 3.5-7.4 3.5-3 3-7 9-23 10l8.7.5a22.8 22.8 0 0 0 2.3 3.5z' fill='%23000064' opacity='.15'%3E%3C/path%3E%3Cpath data-name='stroke' d='M28.8 19.5a21.1 21.1 0 0 0-7.1 2.2c-7.9 4.2-9.2 11-9.2 16.3s2.3 13.1 10.8 20h7.3v-4l8.9.5a20.1 20.1 0 0 0 2.3 3.5h6.7v-6a47.9 47.9 0 0 0 6-5c2.9.3 5.9-2 7-8.7 0-1-.5-1.3-1-1.3a6.8 6.8 0 0 1-3-1c-.4-.5-1.6-4.7-3.8-8a11.7 11.7 0 0 1 4.1-5.2c-2.8-1.4-5.7-2.4-11.4-1.8-1.5-.3-4-.9-6.4-1.3' fill='none' stroke='%232e4369' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3E%3C/path%3E%3Ccircle data-name='stroke' cx='34.5' cy='14' r='8' fill='none' stroke='%232e4369' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3E%3C/circle%3E%3Cpath data-name='stroke' d='M12.5 38c-2.9-.3-10-1.4-10 2s1.9 3.4 3.8 2.6 4.3-5.5-3.8-8.6m25.7-8.9a20.1 20.1 0 0 1 12.7-.1' fill='none' stroke='%232e4369' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3E%3C/path%3E%3Ccircle data-name='stroke' cx='48.5' cy='34' r='1' fill='none' stroke='%232e4369' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'%3E%3C/circle%3E%3C/svg%3E" alt="Contabimo" />
                     <span class="text-sans-serif">Contabimo</span>
                 </div>
             </a>
 
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav align-items-center justify-content-center">
                     <li class="nav-item">
                         <a class="nav-link" href="/companies" role="button">Empresas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" role="button">Facturas</a>
+                        <a class="nav-link" href="/incomes" role="button">Ingresos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" role="button">Presupuestos</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" role="button">Analítica</a>
+                        <a class="nav-link" href="/expenses" role="button">Gastos</a>
                     </li>
                 </ul>
             </div>
         </nav>
 
-        <div class="content mt-4">
+        <div class="content mt-2">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <div class="container-fluid">
@@ -54,7 +54,9 @@
 
     </div>
 
-    <script async defer src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script async defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
+
+    {% block script %}{% endblock %}
   </body>
 </html>

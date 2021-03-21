@@ -23,10 +23,10 @@
                         <th scope="col">DNI / CIF</th>
                         <th scope="col" class="optional">Fecha de creación</th>
                         <th scope="col" class="optional">Fecha de modificación</th>
-                        <th scope="col" class="optional">Total de facturas</th>
-                        <th scope="col" class="optional">Dinero facturado</th>
+                        <th scope="col" class="optional">Total de ingresos</th>
+                        <th scope="col" class="optional">Total de gastos</th>
                         <th scope="col" class="optional">Ciudad</th>
-                        <th scope="col" class="optional">País</th>
+                        <th scope="col" class="optional">Pais</th>
                         <th scope="col"></th>
                     </tr>
                 </thead>
@@ -34,29 +34,29 @@
                     {% for company in companies %}
                         <tr>
                             <td>
-                                <small class="fw-lighter fst-italic">#{{company.id}}</small> - {{company.name}}
-                                {% if company.email %}<br><small class="fw-bold fst-italic"><a href="mailto:{{company.email}}">{{company.email}}</a></small>{% endif %}
+                                <small class="fw-lighter fst-italic">#{{company.0.id}}</small> - {{company.0.name}}
+                                {% if company.0.email %}<br><small class="fw-bold fst-italic"><a href="mailto:{{company.0.email}}">{{company.0.email}}</a></small>{% endif %}
                             </td>
                             <td>
-                                <a target="_black" href="http://www.infocif.es/general/empresas-informacion-listado-empresas.asp?Buscar={{company.dni_cif}}">{{company.dni_cif}}</a>
+                                <a target="_black" href="http://www.infocif.es/general/empresas-informacion-listado-empresas.asp?Buscar={{company.0.dni_cif}}">{{company.0.dni_cif}}</a>
                             </td>
-                            <td class="optional">{{company.date}}</td>
-                            <td class="optional">{{company.modification_date}}</td>
-                            <td class="optional">{{company.invoices|length}}</td>
-                            <td class="optional">-</td>
-                            <td class="optional">{{company.city}}</td>
-                            <td class="optional">{{company.country}}</td>
+                            <td class="optional">{{company.0.date.strftime("%d/%m/%Y")}}</td>
+                            <td class="optional">{{company.0.modification_date.strftime("%d/%m/%Y")}}</td>
+                            <td class="optional">{{company.1}}€</td>
+                            <td class="optional">{{company.2}}€</td>
+                            <td class="optional">{{company.0.city}}</td>
+                            <td class="optional">{{company.0.country}}</td>
                             <td>
                                 <button class="btn btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">...</button>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item" href="/companies/view/{{company.id}}">Ver</a>
+                                        <a class="dropdown-item" href="/companies/view/{{company.0.id}}">Ver</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="/companies/edit/{{company.id}}">Editar</a>
+                                        <a class="dropdown-item" href="/companies/edit/{{company.0.id}}">Editar</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item text-danger" href="/companies/delete/{{company.id}}">Borrar</a>
+                                        <a class="dropdown-item text-danger" href="/companies/delete/{{company.0.id}}">Borrar</a>
                                     </li>
                                 </ul>
                             </td>

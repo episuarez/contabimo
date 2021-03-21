@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+
+  <title>{{income.identifier}}</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+
+        <table class="table table-sm">
+          <tbody>
+            <tr>
+              <td>
+                <h2>FACTURA <small class="color_primary">{{income.identifier}}</small></h2>
+                <p>
+                  <span class="color_secondary bold">Fecha de facturación: </span>{{income.date.strftime("%d/%m/%Y")}}<br>
+                  <span class="color_secondary bold">Fecha de vencimiento: </span>{{income.expiration_date.strftime("%d/%m/%Y")}}
+                </p>
+              </td>
+              <td class="text-end">
+                <img alt="logo" class="logo" src="{{ url_for('static', filename='logo.jpg', _external=True) }}" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                {{income.company.name}}<br>
+                {{income.company.dni_cif}}<br>
+                {{income.company.address}}<br>
+                {{income.company.postal_code}}, {{income.company.city}}, {{income.company.province}}, {{income.company.country}}<br>
+                {{income.company.email}} {{income.company.phone}}
+              </td>
+              <td class="text-end">
+                {{my_company.name}}<br>
+                {{my_company.dni_cif}}<br>
+                {{my_company.address}}<br>
+                {{my_company.postal_code}}, {{my_company.city}}, {{my_company.province}}, {{my_company.country}}<br>
+                {{my_company.email}} {{my_company.phone}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <table class="table table-sm table-bordered">
+          <thead class="bg_primary text-light">
+            <tr>
+              <th class="text-center col-md-6">Descripción</th>
+              <th class="text-center">Cantidad</th>
+              <th class="text-center">Precio €</th>
+              <th class="text-center">Importe €</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% set ns = namespace(subtotal=0) %}
+            {% for product in income.products %}
+              <tr>
+                <td class="text-center">{{product.description}}</td>
+                <td class="text-center">{{product.amount}} €</td>
+                <td class="text-center">{{product.price}} €</td>
+                <td class="text-center">{{product.amount * product.price}} €</td>
+
+                {% set ns.subtotal = ns.subtotal + (product.amount * product.price) %}
+                
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row mt-2">
+      <div class="col">
+        <table class="table table-sm table-bordered">
+          <thead class="bg_primary text-light">
+            <tr>
+              <th class="text-center col-md-4">Subtotal €</th>
+              <th class="text-center col-md-2">IRPF {{income.irpf}}%</th>
+              <th class="text-center col-md-2">IVA {{income.iva}}%</th>
+              <th class="text-center col-md-4">Total €</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center">{{ns.subtotal}} €</td>
+              <td class="text-center">{{income.irpf_money}} €</td>
+              <td class="text-center">{{income.iva_money}} €</td>
+              <td class="text-center">{{income.total}} €</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h5 class="bold">Notas:</h5>
+        {% if income.notes %}
+          <p>{{income.notes}}</p>
+        {% else %}
+          <p>Sin notas.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h5 class="bold">Métodos de pago:</h5>
+        <p>
+          <span class="color_secondary bold">Cuenta bancaria: </span>{{my_company.bank_account}}<br>
+          <span class="color_secondary bold">Bizum: </span>{{my_company.bizum_account}}<br>
+          <span class="color_secondary bold">Paypal: </span>{{my_company.paypal_account}}
+        </p>
+        <p>
+          El pago debe realizarse antes de la fecha de vencimiento.<br>
+          Si es posible, enviar la notificación del pago a <a href="mailto:{{my_company.email}}">{{my_company.email}}</a>
+        </p>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>

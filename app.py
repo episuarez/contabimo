@@ -1,7 +1,10 @@
 import datetime
+import json
 import math
+import time
 
-from flask import Flask, flash, redirect, render_template, request, url_for
+import pdfkit
+from flask import Flask, flash, redirect, render_template, request, url_for, make_response
 from pony.orm import Database
 
 import models
@@ -10,6 +13,8 @@ app = Flask(__name__);
 
 app.config["DEBUG"] = True;
 app.config["SECRET_KEY"] = "fdfgdfgdfgdp90349g03j49jg3049jg0394tj094u2094u2039i0239ir0";
+
+data = json.load(open("my_data.json", encoding="utf-8"));
 
 @app.route("/")
 def home():
@@ -23,7 +28,13 @@ def companies(page):
     limit = 25;
 
     with models.orm.db_session:
-        companies = models.orm.select(company for company in models.Companies).order_by(lambda: company.name);
+        companies = models.orm.select(
+            (
+                company, 
+                sum(income.total for income in company.income_invoice),
+                sum(expense.total for expense in company.expense_invoice),
+            ) 
+            for company in models.Companies).order_by(lambda: company.name);
 
         maxpage = math.ceil(companies.count() / limit);
         companies = list(companies.page(page, limit));
@@ -84,7 +95,7 @@ def view_company(id):
 
 @app.route("/companies/edit/<id>", methods=["GET", "POST"])
 def edit_company(id):
-    if request.method == "POST" :
+    if request.method == "POST":
         with models.orm.db_session:
             if models.orm.count(company for company in models.Companies if company.id == id) > 0:
                 company = models.Companies[id];
@@ -119,41 +130,186 @@ def edit_company(id):
                 flash("No se encuentra a la compañia que intentas acceder.")
                 return redirect(url_for("companies"));
 
-# Invoices
+# Income
 
-@app.route("/invoices")
-@app.route("/invoices/<year>")
-def invoices():
-    pass;
+@app.route("/incomes", defaults={"page": 1})
+@app.route("/incomes/<int:page>")
+def incomes(page):
+    limit = 25;
 
-@app.route("/invoices/add", methods=["GET", "POST"])
-def add_invoice():
-    pass;
+    with models.orm.db_session:
+        incomes = models.orm.select(incomes for incomes in models.IncomeInvoice).order_by(lambda: incomes.id);
 
-@app.route("/invoices/copy")
-def copy_invoice():
-    pass;
+        maxpage = math.ceil(incomes.count() / limit);
+        incomes = list(incomes.page(page, limit));
 
-@app.route("/invoices/pdf/<id>")
-def view_invoice_pdf(id):
-    pass;
+        return render_template("incomes.html", incomes=incomes, maxpage=maxpage, page=page);
 
-@app.route("/invoices/delete/<id>")
-def delete_invoice(id):
-    pass;
+@app.route("/incomes/add", methods=["GET", "POST"])
+def add_income():
+    if request.method == "POST":
+        with models.orm.db_session:
+            if models.orm.count(income for income in models.IncomeInvoice if income.identifier == request.form["identifier"]) > 0:
+                flash(f"El identificador {request.form['identifier']} está repetido, no se ha podido agregar el ingreso.");
+                return redirect(url_for("incomes"));
+            else:
+                new_income = models.IncomeInvoice(
+                    company=request.form["company"],
+                    identifier=request.form["identifier"],
+                    date=datetime.datetime.now(),
+                    modification_date=datetime.datetime.now(),
+                    expiration_date=datetime.datetime.strptime(request.form["expiration_date"], "%d/%m/%Y"),
+                    status=request.form["status"],
+                    irpf=request.form["irpf"],
+                    iva=request.form["iva"],
+                    irpf_money=request.form["irpf_money"],
+                    iva_money=request.form["iva_money"],
+                    total=request.form["total"],
+                    notes=request.form["notes"]
+                );
+                models.orm.commit();
 
-@app.route("/invoices/edit/<id>", methods=["GET", "POST"])
+                keys = list(dict(request.form).keys());
+                for field in range(10, len(keys), 3):
+                    position = keys[field][-3:];
+
+                    new_product = models.IncomeProducts(
+                        invoice=new_income.id,
+                        description=request.form["description" + position],
+                        amount=request.form["amount" + position],
+                        price=request.form["price" + position]
+                    );
+
+                flash("Se ha agregado correctamente el ingreso");
+        return redirect(url_for("incomes"));
+    else:
+        with models.orm.db_session:
+            last_identifier = list(models.orm.select(income.identifier for income in models.IncomeInvoice if income.date > datetime.datetime(int(time.strftime("%Y")), 1, 1)))[-1];
+        number = int(last_identifier[-3:]) + 1;
+        number = ("0" * (3 - len(str(number))))  + str(number);
+
+        identifier = data["DEFAULTS"]["START_IDENTIFIER"] + time.strftime("%Y") + number;
+
+        with models.orm.db_session:
+            companies = list(models.orm.select((company.id, company.name) for company in models.Companies).order_by(lambda: company.name));
+
+        return render_template("add_income.html", companies=companies, identifier=identifier, iva=data["DEFAULTS"]["IVA"], irpf=data["DEFAULTS"]["IRPF"]);
+
+@app.route("/incomes/copy/<id>")
+def copy_income(id):
+    with models.orm.db_session:
+        if models.orm.count(income for income in models.IncomeInvoice if income.id == id) > 0:
+            if request.method == "POST":
+                pass;
+            else:
+                last_identifier = list(models.orm.select(income.identifier for income in models.IncomeInvoice if income.date > datetime.datetime(int(time.strftime("%Y")), 1, 1)))[-1];
+                number = int(last_identifier[-3:]) + 1;
+                number = ("0" * (3 - len(str(number))))  + str(number);
+
+                identifier = data["DEFAULTS"]["START_IDENTIFIER"] + time.strftime("%Y") + number;
+
+                income = models.IncomeInvoice[id];
+                companies = list(models.orm.select((company.id, company.name) for company in models.Companies).order_by(lambda: company.name));
+
+                return render_template("copy_income.html", identifier=identifier, income=income, companies=companies);
+        else:
+            flash("No se encuentra el ingreso que intentas copiar.")
+            return redirect(url_for("incomes"));
+
+@app.route("/incomes/pdf/<pdf>/<id>")
+def view_income_pdf_f(id, pdf):
+    with models.orm.db_session:
+        if models.orm.count(income for income in models.IncomeInvoice if income.id == id) > 0:
+            income = list(models.orm.select(income for income in models.IncomeInvoice if income.id == id))[0];
+            
+            if pdf and pdf in "fp":
+                if pdf == "f":
+                    html = render_template("pdf/income.html", my_company=data["my_company"], income=income);
+                else:
+                    html = render_template("pdf/budget.html", my_company=data["my_company"], income=income);
+
+                options = {
+                    "page-size": "A4",
+                    "dpi": 300
+                }
+                pdf = pdfkit.from_string(html, False, options=options, css="static/pdf.css");
+                
+                response = make_response(pdf);
+                response.headers["Content-Type"] = "application/pdf"
+                response.headers["Content-Disposition"] = f"filename={income.identifier}.pdf"
+                
+                return response;
+            else:
+                flash("Tipo de pdf invalido.")
+                return redirect(url_for("incomes"));
+        else:
+            flash("No existe el ingreso.")
+            return redirect(url_for("incomes"));
+
+@app.route("/incomes/delete/<id>")
+def delete_income(id):
+    with models.orm.db_session:
+        if models.orm.count(income for income in models.IncomeInvoice if income.id == id) > 0:
+            models.IncomeInvoice[id].delete();
+            flash("Se ha eliminado el ingreso.")
+            return redirect(url_for("incomes"));
+        else:
+            flash("No se encuentra a la compañia que intentas acceder.")
+            return redirect(url_for("incomes"));
+
+@app.route("/incomes/view/<id>")
+def view_income(id):
+    with models.orm.db_session:
+        if models.orm.count(income for income in models.IncomeInvoice if income.id == id) > 0:
+            income = models.IncomeInvoice[id];
+            return render_template("view_income.html", income=income);
+        else:
+            flash("No se encuentra el ingreso que intentas acceder.")
+            return redirect(url_for("incomes"));
+
+@app.route("/incomes/edit/<id>", methods=["GET", "POST"])
 def edit_invoice(id):
-    pass;
+    with models.orm.db_session:
+        if models.orm.count(income for income in models.IncomeInvoice if income.id == id) > 0:
+            if request.method == "POST":
+                income = models.IncomeInvoice[id];
+
+                income.company = request.form["company"];
+                income.modification_date = datetime.datetime.now();
+                income.expiration_date = datetime.datetime.strptime(request.form["expiration_date"], "%d/%m/%Y");
+                income.status = request.form["status"];
+                income.irpf = request.form["irpf"];
+                income.iva = request.form["iva"];
+                income.irpf_money = request.form["irpf_money"];
+                income.iva_money = request.form["iva_money"];
+                income.total = request.form["total"];
+                income.notes = request.form["notes"];
+
+                models.orm.select(income_product for income_product in models.IncomeProducts if income_product.invoice.id == income.id).delete();
+
+                keys = list(dict(request.form).keys());
+                for field in range(10, len(keys), 3):
+                    position = keys[field][-3:];
+
+                    new_product = models.IncomeProducts(
+                        invoice=income.id,
+                        description=request.form["description" + position],
+                        amount=request.form["amount" + position],
+                        price=request.form["price" + position]
+                    );
+
+                return redirect(url_for("incomes"));
+            else:
+                income = models.IncomeInvoice[id];
+                companies = list(models.orm.select((company.id, company.name) for company in models.Companies).order_by(lambda: company.name));
+
+                return render_template("edit_income.html", income=income, companies=companies);
+        else:
+            flash("No se encuentra el ingreso que intentas acceder.")
+            return redirect(url_for("incomes"));
 
 # Products
 
 @app.route("/products/delete/<id>/<invoice_id>")
 def delete_products(id, invoice_id):
-    pass;
-
-# Analytics
-
-@app.route("/analytics")
-def analytics():
     pass;

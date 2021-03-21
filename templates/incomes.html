@@ -1,0 +1,94 @@
+{% extends "template.html" %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-4">
+                <h5 class="mb-0">Ingresos</h5>
+            </div>
+
+            <div class="col-8 text-end">
+                <a class="btn btn-outline-light btn-sm" type="button" href="/incomes/add">Crear ingreso</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="data-table">
+            <table class="table table-sm table-borderless table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Identificador</th>
+                        <th scope="col" class="optional">Estado</th>
+                        <th scope="col" class="optional">Fecha de creación</th>
+                        <th scope="col" class="optional">Fecha de modificación</th>
+                        <th scope="col" class="optional">IVA</th>
+                        <th scope="col" class="optional">IRPF</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Empresa</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for income in incomes %}
+                        <tr>
+                            <td>{{income.identifier}}</td>
+                            <td class="optional">{{income.status}}</td>
+                            <td class="optional">{{income.date.strftime("%d/%m/%Y")}}</td>
+                            <td class="optional">{{income.modification_date.strftime("%d/%m/%Y")}}</td>
+                            <td class="optional">{{income.iva}}%</td>
+                            <td class="optional">{{income.irpf}}%</td>
+                            <td>{{income.total}}€</td>
+                            <td>
+                                <small class="fw-lighter fst-italic">#{{income.company.id}}</small> - {{income.company.name}}
+                                {% if income.company.email %}<br><small class="fw-bold fst-italic"><a href="mailto:{{income.company.email}}">{{income.company.email}}</a></small>{% endif %}
+                            </td>
+                            <td>
+                                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">...</button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" href="/incomes/view/{{income.id}}">Ver</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" target="_blank" href="/incomes/pdf/f/{{income.id}}">Generar factura</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" target="_blank" href="/incomes/pdf/p/{{income.id}}">Generar presupuesto</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/incomes/copy/{{income.id}}">Copiar</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="/incomes/edit/{{income.id}}">Editar</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="/incomes/delete/{{income.id}}">Borrar</a>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-auto">
+                <nav>
+                    <ul class="pagination pagination-sm">
+                        {% for number in range(1, maxpage + 1) %}
+                            <li class="page-item {% if number == page %}active{% endif %}">
+                                <a class="page-link" href="/incomes/{{number}}">{{number}}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -8,6 +8,12 @@ input:required:invalid, input:focus:invalid {
 input:required:valid {
     border: 1px solid rgb(100, 186, 100);
 }
+select:required:invalid, select:focus:invalid {
+    border: 1px solid rgb(186, 100, 100);
+}
+select:required:valid {
+    border: 1px solid rgb(100, 186, 100);
+}
 
 thead {
     border-style: hidden;
@@ -48,8 +54,23 @@ thead {
     padding: 0;
 }
 
+.navbar-light .navbar-toggler {
+    border: 0;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.05rem;
+}
+
 @media only screen and (max-width: 992px) {
     .optional{
         display: none;
+    }
+}
+@media only screen and (max-width: 768px) {
+    .nav-item {
+        border-bottom: 1px solid #252525;
+        text-align: center;
+        width: 25%;
     }
 }
