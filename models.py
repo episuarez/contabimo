@@ -67,5 +67,5 @@ class ExpenseProducts(db.Entity):
     price = orm.Required(float);
     invoice = orm.Required(ExpenseInvoice);
 
-db.bind(provider="sqlite", filename="data.db", create_db=True);
+db.bind(provider="sqlite", filename="user/data.db", create_db=True);
 db.generate_mapping(create_tables=True);

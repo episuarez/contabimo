@@ -2,6 +2,7 @@ import datetime
 import json
 import math
 import time
+import os
 
 import pdfkit
 from flask import Flask, flash, redirect, render_template, request, url_for, make_response
@@ -14,7 +15,31 @@ app = Flask(__name__);
 app.config["DEBUG"] = True;
 app.config["SECRET_KEY"] = "R7Dmcd3cMVET1lk121J8sQLFJGgXRFkCDwYYAC0ESHSGzWzaaNpDF5MGLpzy";
 
-data = json.load(open("my_data.json", encoding="utf-8"));
+if not os.path.exists("user/my_data.json"):
+    with open("user/my_data.json") as my_data:
+        json.dump({
+            "DEFAULTS": {
+                "START_IDENTIFIER": "FACT",
+                "IVA": 21,
+                "IRPF": 0
+            },
+            "my_company": {
+                "name": "name",
+                "email": "email",
+                "dni_cif": "dni_cif",
+                "phone": "phone",
+                "address": "address",
+                "postal_code": "postal_code",
+                "city": "city",
+                "province": "province",
+                "country": "country",
+                "bank_account": "bank_account",
+                "bizum_account": "bizum_account",
+                "paypal_account": "paypal_account"
+            }
+        }, my_data);
+
+data = json.load(open("user/my_data.json", encoding="utf-8"));
 
 @app.route("/")
 def home():
@@ -173,7 +198,7 @@ def add_income():
                 new_income = models.IncomeInvoice(
                     company=request.form["company"],
                     identifier=request.form["identifier"],
-                    date=request.form["date"],
+                    date=datetime.datetime.strptime(request.form["date"], "%d/%m/%Y"),
                     modification_date=datetime.datetime.now(),
                     expiration_date=datetime.datetime.strptime(request.form["expiration_date"], "%d/%m/%Y"),
                     status=request.form["status"],
@@ -187,7 +212,7 @@ def add_income():
                 models.orm.commit();
 
                 keys = list(dict(request.form).keys());
-                for field in range(10, len(keys), 3):
+                for field in range(11, len(keys), 3):
                     position = keys[field][-3:];
 
                     new_product = models.IncomeProducts(
@@ -293,7 +318,7 @@ def edit_invoice(id):
                 income = models.IncomeInvoice[id];
 
                 income.company = request.form["company"];
-                income.date = request.form["date"];
+                income.date = datetime.datetime.strptime(request.form["date"], "%d/%m/%Y");
                 income.modification_date = datetime.datetime.now();
                 income.expiration_date = datetime.datetime.strptime(request.form["expiration_date"], "%d/%m/%Y");
                 income.status = request.form["status"];
@@ -307,7 +332,7 @@ def edit_invoice(id):
                 models.orm.select(income_product for income_product in models.IncomeProducts if income_product.invoice.id == income.id).delete();
 
                 keys = list(dict(request.form).keys());
-                for field in range(10, len(keys), 3):
+                for field in range(11, len(keys), 3):
                     position = keys[field][-3:];
 
                     new_product = models.IncomeProducts(
@@ -353,7 +378,7 @@ def add_expense():
                 new_expense = models.ExpenseInvoice(
                     company=request.form["company"],
                     identifier=request.form["identifier"],
-                    date=request.form["date"],
+                    date=datetime.datetime.strptime(request.form["date"], "%d/%m/%Y"),
                     modification_date=datetime.datetime.now(),
                     expiration_date=datetime.datetime.strptime(request.form["expiration_date"], "%d/%m/%Y"),
                     status=request.form["status"],
@@ -367,7 +392,7 @@ def add_expense():
                 models.orm.commit();
 
                 keys = list(dict(request.form).keys());
-                for field in range(10, len(keys), 3):
+                for field in range(11, len(keys), 3):
                     position = keys[field][-3:];
 
                     new_product = models.ExpenseProducts(
@@ -426,7 +451,7 @@ def edit_expense(id):
                 expense = models.ExpenseInvoice[id];
 
                 expense.company = request.form["company"];
-                expense.date = request.form["date"];
+                expense.date = datetime.datetime.strptime(request.form["date"], "%d/%m/%Y");
                 expense.modification_date = datetime.datetime.now();
                 expense.expiration_date = datetime.datetime.strptime(request.form["expiration_date"], "%d/%m/%Y");
                 expense.status = request.form["status"];
@@ -440,7 +465,7 @@ def edit_expense(id):
                 models.orm.select(expense_product for expense_product in models.ExpenseProducts if expense_product.invoice.id == expense.id).delete();
 
                 keys = list(dict(request.form).keys());
-                for field in range(10, len(keys), 3):
+                for field in range(11, len(keys), 3):
                     position = keys[field][-3:];
 
                     new_product = models.ExpenseProducts(
