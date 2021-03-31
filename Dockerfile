@@ -18,4 +18,4 @@ COPY . /app
 RUN useradd appuser && chown -R appuser /app
 USER appuser
 
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:5000", "-w", "3", "--preload", "main:app"]
