@@ -1,8 +1,15 @@
 import datetime
+import os
+import shutil
 
 from pony import orm
 
 db = orm.Database();
+
+class Configuration(db.Entity):
+    id = orm.PrimaryKey(int, auto=True);
+    name = orm.Required(str, unique=True);
+    value = orm.Required(str);
 
 class Companies(db.Entity):
     id = orm.PrimaryKey(int, auto=True);
@@ -67,5 +74,8 @@ class ExpenseProducts(db.Entity):
     price = orm.Required(float);
     invoice = orm.Required(ExpenseInvoice);
 
-db.bind(provider="sqlite", filename="user/data.db", create_db=True);
-db.generate_mapping(create_tables=True);
+if not os.path.exists("user/data.db"):
+    shutil.copyfile("data.db.example", "user/data.db");
+
+db.bind(provider="sqlite", filename="user/data.db");
+db.generate_mapping();

@@ -1,45 +1,16 @@
 import datetime
-import json
 import math
+import random
+import string
 import time
-import os
 
 import pdfkit
-from flask import Flask, flash, redirect, render_template, request, url_for, make_response
-from pony.orm import Database
+from flask import (Flask, flash, make_response, redirect, render_template, request, url_for)
 
 import models
 
 app = Flask(__name__);
-
-app.config["DEBUG"] = True;
-app.config["SECRET_KEY"] = "R7Dmcd3cMVET1lk121J8sQLFJGgXRFkCDwYYAC0ESHSGzWzaaNpDF5MGLpzy";
-
-if not os.path.exists("user/my_data.json"):
-    with open("user/my_data.json") as my_data:
-        json.dump({
-            "DEFAULTS": {
-                "START_IDENTIFIER": "FACT",
-                "IVA": 21,
-                "IRPF": 0
-            },
-            "my_company": {
-                "name": "name",
-                "email": "email",
-                "dni_cif": "dni_cif",
-                "phone": "phone",
-                "address": "address",
-                "postal_code": "postal_code",
-                "city": "city",
-                "province": "province",
-                "country": "country",
-                "bank_account": "bank_account",
-                "bizum_account": "bizum_account",
-                "paypal_account": "paypal_account"
-            }
-        }, my_data);
-
-data = json.load(open("user/my_data.json", encoding="utf-8"));
+app.config["SECRET_KEY"] = ''.join(random.sample(string.ascii_letters + string.digits + string.punctuation, 50));
 
 @app.route("/")
 def home():
@@ -234,12 +205,16 @@ def add_income():
         number = int(last_identifier[-3:]) + 1;
         number = ("0" * (3 - len(str(number))))  + str(number);
 
-        identifier = data["DEFAULTS"]["START_IDENTIFIER"] + time.strftime("%Y") + number;
-
         with models.orm.db_session:
+            iva = models.Configuration.get(name="IVA").value;
+            irpf = models.Configuration.get(name="IRPF").value;
+            start_identifier = models.Configuration.get(name="START_IDENTIFIER").value;
+
+            identifier = start_identifier + time.strftime("%Y") + number;
+
             companies = list(models.orm.select((company.id, company.name) for company in models.Companies).order_by(lambda: company.name));
 
-        return render_template("add_income.html", date=datetime.datetime.now(), companies=companies, identifier=identifier, iva=data["DEFAULTS"]["IVA"], irpf=data["DEFAULTS"]["IRPF"]);
+        return render_template("add_income.html", date=datetime.datetime.now(), companies=companies, identifier=identifier, iva=iva, irpf=irpf);
 
 @app.route("/incomes/copy/<id>")
 def copy_income(id):
@@ -249,7 +224,8 @@ def copy_income(id):
             number = int(last_identifier[-3:]) + 1;
             number = ("0" * (3 - len(str(number))))  + str(number);
 
-            identifier = data["DEFAULTS"]["START_IDENTIFIER"] + time.strftime("%Y") + number;
+            start_identifier = models.Configuration.get(name="START_IDENTIFIER").value;
+            identifier = start_identifier + time.strftime("%Y") + number;
 
             income = models.IncomeInvoice[id];
             companies = list(models.orm.select((company.id, company.name) for company in models.Companies).order_by(lambda: company.name));
@@ -264,12 +240,14 @@ def view_income_pdf_f(id, pdf):
     with models.orm.db_session:
         if models.orm.count(income for income in models.IncomeInvoice if income.id == id) > 0:
             income = list(models.orm.select(income for income in models.IncomeInvoice if income.id == id))[0];
+
+            configuration_data = dict([(element.name, element.value) for element in list(models.orm.select(configuration for configuration in models.Configuration))]);
             
             if pdf and pdf in "fp":
                 if pdf == "f":
-                    html = render_template("pdf/income.html", my_company=data["my_company"], income=income);
+                    html = render_template("pdf/income.html", my_company=configuration_data, income=income);
                 else:
-                    html = render_template("pdf/budget.html", my_company=data["my_company"], income=income);
+                    html = render_template("pdf/budget.html", my_company=configuration_data, income=income);
 
                 options = {
                     "page-size": "A4",
@@ -408,7 +386,10 @@ def add_expense():
         with models.orm.db_session:
             companies = list(models.orm.select((company.id, company.name) for company in models.Companies).order_by(lambda: company.name));
 
-        return render_template("add_expense.html", date=datetime.datetime.now(), companies=companies, iva=data["DEFAULTS"]["IVA"], irpf=data["DEFAULTS"]["IRPF"]);
+            iva = models.Configuration.get(name="IVA").value;
+            irpf = models.Configuration.get(name="IRPF").value;
+
+        return render_template("add_expense.html", date=datetime.datetime.now(), companies=companies, iva=iva, irpf=irpf);
 
 @app.route("/expenses/copy/<id>")
 def copy_expense(id):
