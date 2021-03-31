@@ -1,0 +1,102 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5>Datos de tu empresa</h5>
+    </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            <form class="row" method="POST" action="/configuration">
+                <div class="col-md-6 form-group mt-2">
+                    <label for="name" class="form-label">Nombre</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="name" name="name" value="{{configuration_data.name}}" required>
+                </div>
+                <div class="col-md-6 form-group mt-2">
+                    <label for="dni_cif" class="form-label">DNI o CIF</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="dni_cif" name="dni_cif" value="{{configuration_data.dni_cif}}" required>
+                </div>
+
+                <div class="col-md-4 form-group mt-2">
+                    <label for="email" class="form-label">Correo electronico</label>
+                    <span class="form-text">*</span>
+                    <input type="email" class="form-control" id="email" name="email" value="{{configuration_data.email}}" required>
+                </div>
+                <div class="col-md-4 form-group mt-2">
+                    <label for="phone" class="form-label">Teléfono</label>
+                    <span class="form-text">*</span>
+                    <input type="tel" class="form-control" id="phone" name="phone" value="{{configuration_data.phone}}" required>
+                </div>
+                <div class="col-md-4 form-group mt-2">
+                    <label for="address" class="form-label">Dirección</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="address" name="address" value="{{configuration_data.address}}" required>
+                </div>
+
+                <div class="col-md-3 form-group mt-2">
+                    <label for="postal_code" class="form-label">Código postal</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{configuration_data.postal_code}}" required>
+                </div>
+                <div class="col-md-3 form-group mt-2">
+                    <label for="city" class="form-label">Ciudad</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="city" name="city" value="{{configuration_data.city}}" required>
+                </div>
+                <div class="col-md-3 form-group mt-2">
+                    <label for="province" class="form-label">Provincia</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="province" name="province" value="{{configuration_data.province}}" required>
+                </div>
+                <div class="col-md-3 form-group mt-2">
+                    <label for="country" class="form-label">Pais</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="country" name="country" value="{{configuration_data.country}}" required>
+                </div>
+
+                <div class="col-md-4 form-group mt-2">
+                    <label for="bank_account" class="form-label">Cuenta bancaria</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="bank_account" name="bank_account" value="{{configuration_data.bank_account}}" required>
+                </div>
+                <div class="col-md-4 form-group mt-2">
+                    <label for="bizum_account" class="form-label">Bizum</label>
+                    <input type="text" class="form-control" id="bizum_account" name="bizum_account" value="{{configuration_data.bizum_account}}">
+                </div>
+                <div class="col-md-4 form-group mt-2">
+                    <label for="paypal_account" class="form-label">Paypal</label>
+                    <input type="text" class="form-control" id="paypal_account" name="paypal_account" value="{{configuration_data.paypal_account}}">
+                </div>
+
+                <div class="col-12 mt-3 mb-3 text-end">
+                    <input type="submit" class="btn btn-primary" value="Guardar cambios">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">
+        <h5>Logo</h5>
+    </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            <form class="row" method="POST" action="/configuration/logo" enctype=multipart/form-data>
+                <div class="col-md-6">
+                    <img id="logo" src="/static/logo.jpg" height="128px" alt="logo">
+                </div>
+                <div class="col-md-6 form-group mt-2">
+                    <label for="new_logo" class="form-label">Nombre</label>
+                    <input id="new_logo" name="new_logo" accept="image/*" type="file">
+                </div>
+
+                <div class="col-12 mt-3 mb-3 text-end">
+                    <input type="submit" class="btn btn-primary" value="Subir imagen">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

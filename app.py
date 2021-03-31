@@ -6,11 +6,15 @@ import time
 
 import pdfkit
 from flask import (Flask, flash, make_response, redirect, render_template, request, url_for)
+from werkzeug.utils import secure_filename
 
 import models
 
 app = Flask(__name__);
 app.config["SECRET_KEY"] = ''.join(random.sample(string.ascii_letters + string.digits + string.punctuation, 50));
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0;
+
+# Home
 
 @app.route("/")
 def home():
@@ -32,6 +36,45 @@ def home():
         top_expenses = list(models.orm.select((expense.company.name, expense.total) for expense in models.ExpenseInvoice).order_by(lambda: models.orm.desc(expense.total)))[:5];
 
     return render_template("home.html", total_companies=total_companies, last_company=last_company, total_incomes=total_incomes, total_expenses=total_expenses, top_company_incomes=top_company_incomes, top_company_expenses=top_company_expenses, top_incomes=top_incomes, top_expenses=top_expenses);
+
+# Configuration
+
+@app.route("/configuration", methods=["GET", "POST"])
+def configuration():
+    if request.method == "POST":
+        
+        keys = list(dict(request.form).keys());
+        with models.orm.db_session:
+            for field in range(0, len(keys)):
+                models.Configuration.get(name=keys[field]).value = request.form[keys[field]];
+
+        flash("Se han modificado los datos.");
+
+        return redirect(url_for("configuration"));
+    else:
+        with models.orm.db_session:
+            configuration_data = dict([(element.name, element.value) for element in list(models.orm.select(configuration for configuration in models.Configuration))]);
+
+        return render_template("configuration.html", configuration_data=configuration_data);
+
+@app.route("/configuration/logo", methods=["POST"])
+def configuration_logo():
+
+    if "new_logo" not in request.files:
+        flash("No se ha encontrado la imágen");
+    
+    file = request.files['new_logo'];
+
+    if file.filename == "":
+        flash("No se ha seleccionado un fichero.");
+
+    if file.filename.split(".")[1].lower() in "jpg jpeg png":
+        filename = secure_filename(file.filename);
+        file.save("static/logo.jpg");
+
+        flash("Fichero subido.");
+
+    return redirect(url_for("configuration"));
 
 # Companies
 
@@ -56,7 +99,7 @@ def companies(page):
 
 @app.route("/companies/add", methods=["GET", "POST"])
 def add_company():
-    if request.method == "POST" :
+    if request.method == "POST":
         with models.orm.db_session:
             if models.orm.count(company for company in models.Companies if company.name == request.form["name"]) > 0:
                 flash(f"El nombre {request.form['name']} está repetido, no se ha podido agregar la empresa.");
