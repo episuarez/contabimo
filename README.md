@@ -15,8 +15,8 @@ Aplicación construida sobre Python + Flask + PonyORM + SQLite
 
 ## Roapmap
 
-* [ ] Realizar una analitica de los datos
-* [ ] Gestionar los cambios de personalizacion desde la aplicación
+* [X] Realizar una analitica de los datos
+* [X] Gestionar los cambios de personalizacion desde la aplicación
 * [ ] Permitir los cambios de multiples autonomos y/o empresas
 * [ ] Exportación de movimientos para asesores
 
