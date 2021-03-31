@@ -20,11 +20,6 @@ Aplicación construida sobre Python + Flask + PonyORM + SQLite
 * [ ] Permitir los cambios de multiples autonomos y/o empresas
 * [ ] Exportación de movimientos para asesores
 
-## Personalización
-
-* Puedes cambiar el logo cambiando la imágen de /static/logo.jpg
-* Tus datos de empresa/autonomo puedes cambiarlos en my_data.json
-
 ## Capturas
 
 <img src="https://raw.githubusercontent.com/OwariStudios/contabimo/main/screenshot/screenshot001.jpeg?raw=true" alt="Contabimo"/>
