@@ -293,10 +293,15 @@ def view_income_pdf_f(id, pdf):
                     html = render_template("pdf/budget.html", my_company=configuration_data, income=income);
 
                 options = {
+                    "encoding": "UTF-8",
                     "page-size": "A4",
                     "dpi": 300
                 }
-                pdf = pdfkit.from_string(html, False, options=options, css="static/pdf.css");
+                
+                try:
+                    pdf = pdfkit.from_string(html, False, options=options, css="static/pdf.css");
+                except Exception as error:
+                    return str(error);
                 
                 response = make_response(pdf);
                 response.headers["Content-Type"] = "application/pdf"
