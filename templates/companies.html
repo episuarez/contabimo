@@ -42,8 +42,8 @@
                             </td>
                             <td class="optional">{{company.0.date.strftime("%d/%m/%Y")}}</td>
                             <td class="optional">{{company.0.modification_date.strftime("%d/%m/%Y")}}</td>
-                            <td class="optional">{{company.1}}€</td>
-                            <td class="optional">{{company.2}}€</td>
+                            <td class="optional">{{company.1|round(2, 'floor')}}€</td>
+                            <td class="optional">{{company.2|round(2, 'floor')}}€</td>
                             <td class="optional">{{company.0.city}}</td>
                             <td class="optional">{{company.0.country}}</td>
                             <td>

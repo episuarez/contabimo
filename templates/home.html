@@ -1,6 +1,11 @@
 {% extends "template.html" %}
 {% block content %}
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <script>
+        const colorScheme = [
+            "", "#81ecec","#00cec9","#74b9ff","#0984e3"
+        ];
+    </script>
 
     <div class="row">
         <div class="col-md-6 mb-3">
@@ -20,8 +25,100 @@
                     <h5>Facturas</h5>
                 </div>
                 <div class="card-body">
-                    <p><span class="fw-bolder">Total de ingresos:</span> {{total_incomes}} €</p>
-                    <p><span class="fw-bolder">Total de gastos:</span> {{total_expenses}} €</p>
+                    <p><span class="fw-bolder">Total de ingresos:</span> {{total_incomes|round(2, 'floor')}} €</p>
+                    <p><span class="fw-bolder">Total de gastos:</span> {{total_expenses|round(2, 'floor')}} €</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Ingresos</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chart_incomes" height="400px"></canvas>
+                    <script>
+                        new Chart(document.getElementById("chart_incomes"),{
+                            "type": "bar",
+                            "data": {
+                                "labels": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                                "datasets":[
+                                    {% for income in incomes %}
+                                        {"label": {{income.year}}, "data": {{income.data}}, "backgroundColor": colorScheme[{{loop.index}}], "lineTension": 0.1},
+                                    {% endfor %}
+                                ]
+                                },
+                                "options": {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    legend: {
+                                        position: 'bottom',
+                                    }
+                                }
+                            });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5>IRPF</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chart_irpf" height="400px"></canvas>
+                    <script>
+                        new Chart(document.getElementById("chart_irpf"),{
+                            "type": "bar",
+                            "data": {
+                                "labels": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                                "datasets":[
+                                    {% for irpf in irpfs %}
+                                        {"label": {{irpf.year}}, "data": {{irpf.data}}, "backgroundColor": colorScheme[{{loop.index}}], "lineTension": 0.1},
+                                    {% endfor %}
+                                ]
+                                },
+                                "options": {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    legend: {
+                                        position: 'bottom',
+                                    }
+                                }
+                            });
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5>IVA</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="chart_iva" height="400px"></canvas>
+                    <script>
+                        new Chart(document.getElementById("chart_iva"),{
+                            "type": "bar",
+                            "data": {
+                                "labels": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                                "datasets":[
+                                    {% for iva in ivas %}
+                                        {"label": {{iva.year}}, "data": {{iva.data}}, "backgroundColor": colorScheme[{{loop.index}}], "lineTension": 0.1},
+                                    {% endfor %}
+                                ]
+                                },
+                                "options": {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    legend: {
+                                        position: 'bottom',
+                                    }
+                                }
+                            });
+                    </script>
                 </div>
             </div>
         </div>
@@ -47,7 +144,7 @@
                                         {{company.0}}
                                     </td>
                                     <td>
-                                        {{company.1}} €
+                                        {{company.1|round(2, 'floor')}} €
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -76,7 +173,7 @@
                                         {{company.0}}
                                     </td>
                                     <td>
-                                        {{company.1}} €
+                                        {{company.1|round(2, 'floor')}} €
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -107,7 +204,7 @@
                                         {{income.0}}
                                     </td>
                                     <td>
-                                        {{income.1}} €
+                                        {{income.1|round(2, 'floor')}} €
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -136,7 +233,7 @@
                                         {{expense.0}}
                                     </td>
                                     <td>
-                                        {{expense.1}} €
+                                        {{expense.1|round(2, 'floor')}} €
                                     </td>
                                 </tr>
                             {% endfor %}

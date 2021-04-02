@@ -32,10 +32,37 @@ def home():
         top_company_incomes = sorted(list(models.orm.select((company.name, sum(income.total for income in company.income_invoice)) for company in models.Companies)), key=lambda element: element[1], reverse=True)[:5];
         top_company_expenses = sorted(list(models.orm.select((company.name, sum(expense.total for expense in company.expense_invoice)) for company in models.Companies)), key=lambda element: element[1], reverse=True)[:5];
 
+        first_year = list(models.orm.select(income.date.year for income in models.IncomeInvoice).order_by(lambda: models.orm.desc(income.date)))[-1];
+        last_year = int(time.strftime("%Y"));
+
+        if last_year - first_year > 3:
+            first_year = last_year - 3;
+        
+        incomes = [];
+        for year in range(first_year, last_year + 1):
+            incomes_year = [];
+            for month in range(1, 13):
+                incomes_year.append(round(sum(models.orm.select(sum(income.total for income in company.income_invoice if income.date.year == year and income.date.month == month) for company in models.Companies)), 2));
+            incomes.append({"year": year, "data": incomes_year});
+
+        irpfs = [];
+        for year in range(first_year, last_year + 1):
+            irpfs_year = [];
+            for month in range(1, 13):
+                irpfs_year.append(round(sum(models.orm.select(sum(income.irpf_money for income in company.income_invoice if income.date.year == year and income.date.month == month) for company in models.Companies)), 2));
+            irpfs.append({"year": year, "data": irpfs_year});
+
+        ivas = [];
+        for year in range(first_year, last_year + 1):
+            ivas_year = [];
+            for month in range(1, 13):
+                ivas_year.append(round(sum(models.orm.select(sum(income.iva_money for income in company.income_invoice if income.date.year == year and income.date.month == month) for company in models.Companies)), 2));
+            ivas.append({"year": year, "data": ivas_year});
+
         top_incomes = list(models.orm.select((income.company.name, income.total) for income in models.IncomeInvoice).order_by(lambda: models.orm.desc(income.total)))[:5];
         top_expenses = list(models.orm.select((expense.company.name, expense.total) for expense in models.ExpenseInvoice).order_by(lambda: models.orm.desc(expense.total)))[:5];
 
-    return render_template("home.html", total_companies=total_companies, last_company=last_company, total_incomes=total_incomes, total_expenses=total_expenses, top_company_incomes=top_company_incomes, top_company_expenses=top_company_expenses, top_incomes=top_incomes, top_expenses=top_expenses);
+    return render_template("home.html", total_companies=total_companies, last_company=last_company, total_incomes=total_incomes, total_expenses=total_expenses, top_company_incomes=top_company_incomes, top_company_expenses=top_company_expenses, top_incomes=top_incomes, top_expenses=top_expenses, incomes=incomes, irpfs=irpfs, ivas=ivas);
 
 # Configuration
 
