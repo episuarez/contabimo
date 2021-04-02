@@ -173,12 +173,12 @@
             total_value += total_row;
         }
         
-        irpf_money_value = (total_value * (irpf.value / 100));
-        iva_money_value = (total_value * (iva.value / 100));
+        irpf_money_value = total_value * (irpf.value / 100);
+        iva_money_value = total_value * (iva.value / 100);
 
-        irpf_money.value = irpf_money_value;
-        iva_money.value = iva_money_value;
-        total.value = total_value - irpf_money_value + iva_money_value;
+        irpf_money.value = irpf_money_value.toFixed(2);
+        iva_money.value = iva_money_value.toFixed(2);
+        total.value = (total_value - irpf_money_value + iva_money_value).toFixed(2);
     }
 </script>
 {% endblock %}

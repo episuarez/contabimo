@@ -194,7 +194,7 @@ def incomes(page):
     limit = 25;
 
     with models.orm.db_session:
-        incomes = models.orm.select(incomes for incomes in models.IncomeInvoice).order_by(lambda: incomes.id);
+        incomes = models.orm.select(income for income in models.IncomeInvoice).order_by(lambda: models.orm.desc(income.identifier));
 
         maxpage = math.ceil(incomes.count() / limit);
         incomes = list(incomes.page(page, limit));
@@ -386,7 +386,7 @@ def expenses(page):
     limit = 25;
 
     with models.orm.db_session:
-        expenses = models.orm.select(expense for expense in models.ExpenseInvoice).order_by(lambda: expense.id);
+        expenses = models.orm.select(expense for expense in models.ExpenseInvoice).order_by(lambda: models.orm.desc(expense.identifier));
 
         maxpage = math.ceil(expenses.count() / limit);
         expenses = list(expenses.page(page, limit));
