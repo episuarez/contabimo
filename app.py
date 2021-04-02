@@ -81,6 +81,7 @@ def configuration_company():
             models.Configuration.get(name=keys[field]).value = request.form[keys[field]];
 
     flash("Se han modificado los datos.");
+    return redirect(url_for("configuration"));
 
 @app.route("/configuration/general", methods=["POST"])
 def configuration_general():
