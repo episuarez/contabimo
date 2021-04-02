@@ -66,23 +66,32 @@ def home():
 
 # Configuration
 
-@app.route("/configuration", methods=["GET", "POST"])
+@app.route("/configuration")
 def configuration():
-    if request.method == "POST":
-        
-        keys = list(dict(request.form).keys());
-        with models.orm.db_session:
-            for field in range(0, len(keys)):
-                models.Configuration.get(name=keys[field]).value = request.form[keys[field]];
+    with models.orm.db_session:
+        configuration_data = dict([(element.name, element.value) for element in list(models.orm.select(configuration for configuration in models.Configuration))]);
 
-        flash("Se han modificado los datos.");
+    return render_template("configuration.html", configuration_data=configuration_data);
 
-        return redirect(url_for("configuration"));
-    else:
-        with models.orm.db_session:
-            configuration_data = dict([(element.name, element.value) for element in list(models.orm.select(configuration for configuration in models.Configuration))]);
+@app.route("/configuration/my_company", methods=["POST"])
+def configuration_company():
+    keys = list(dict(request.form).keys());
+    with models.orm.db_session:
+        for field in range(0, len(keys)):
+            models.Configuration.get(name=keys[field]).value = request.form[keys[field]];
 
-        return render_template("configuration.html", configuration_data=configuration_data);
+    flash("Se han modificado los datos.");
+
+@app.route("/configuration/general", methods=["POST"])
+def configuration_general():
+    keys = list(dict(request.form).keys());
+    with models.orm.db_session:
+        for field in range(0, len(keys)):
+            models.Configuration.get(name=keys[field]).value = request.form[keys[field]];
+
+    flash("Se han modificado los datos.");
+
+    return redirect(url_for("configuration"));
 
 @app.route("/configuration/logo", methods=["POST"])
 def configuration_logo():

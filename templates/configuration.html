@@ -6,7 +6,7 @@
     </div>
     <div class="card-body">
         <div class="container-fluid">
-            <form class="row" method="POST" action="/configuration">
+            <form class="row" method="POST" action="/configuration/my_company">
                 <div class="col-md-6 form-group mt-2">
                     <label for="name" class="form-label">Nombre</label>
                     <span class="form-text">*</span>
@@ -67,6 +67,37 @@
                 <div class="col-md-4 form-group mt-2">
                     <label for="paypal_account" class="form-label">Paypal</label>
                     <input type="text" class="form-control" id="paypal_account" name="paypal_account" value="{{configuration_data.paypal_account}}">
+                </div>
+
+                <div class="col-12 mt-3 mb-3 text-end">
+                    <input type="submit" class="btn btn-primary" value="Guardar cambios">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">
+        <h5>Datos Generales</h5>
+    </div>
+    <div class="card-body">
+        <div class="container-fluid">
+            <form class="row" method="POST" action="/configuration/general">
+                <div class="col-md-4 form-group mt-2">
+                    <label for="START_IDENTIFIER" class="form-label">Indentificador de facturas</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="START_IDENTIFIER" name="START_IDENTIFIER" value="{{configuration_data.START_IDENTIFIER}}" required>
+                </div>
+                <div class="col-md-4 form-group mt-2">
+                    <label for="IVA" class="form-label">IVA</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="IVA" name="IVA" value="{{configuration_data.IVA}}" required>
+                </div>
+                <div class="col-md-4 form-group mt-2">
+                    <label for="IRPF" class="form-label">IRPF</label>
+                    <span class="form-text">*</span>
+                    <input type="text" class="form-control" id="IRPF" name="IRPF" value="{{configuration_data.IRPF}}" required>
                 </div>
 
                 <div class="col-12 mt-3 mb-3 text-end">
