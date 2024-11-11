@@ -6,4 +6,4 @@ Jinja2==2.11.3
 MarkupSafe==1.1.1
 pdfkit==0.6.1
 pony==0.7.14
-Werkzeug==2.2.3
+Werkzeug==3.0.6
